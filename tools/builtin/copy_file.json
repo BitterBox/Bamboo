@@ -1,0 +1,19 @@
+{
+  "name": "copy_file",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "file",
+  "function": {
+    "description": "将文件从源路径复制到目标路径。目标文件不能已存在（与 write_file 一致）。复制操作暂存到批量事务缓冲区，需调用 batch_commit 后原子生效。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "description": "源文件的绝对路径" },
+        "destination": { "type": "string", "description": "目标文件的绝对路径（文件不能已存在）" }
+      },
+      "required": ["source", "destination"]
+    }
+  },
+  "executor": "builtin:copy_file",
+  "permissions": ["allowRead", "allowWrite", "pathInAllowedDirs"]
+}

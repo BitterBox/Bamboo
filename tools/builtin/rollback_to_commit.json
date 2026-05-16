@@ -1,0 +1,18 @@
+{
+  "name": "rollback_to_commit",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "file",
+  "function": {
+    "description": "从指定 commit 目录恢复所有备份文件到原位置。回滚前会自动备份当前状态。注意：执行回滚前需要先提交或清空暂存区。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "commitDir": { "type": "string", "description": "commit 目录的绝对路径（从 list_recent_commits 获取）" }
+      },
+      "required": ["commitDir"]
+    }
+  },
+  "executor": "builtin:rollback_to_commit",
+  "permissions": ["allowWrite"]
+}

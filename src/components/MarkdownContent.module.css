@@ -1,0 +1,152 @@
+.markdown {
+  word-break: break-word;
+}
+
+/* 段落（间距由 CSS 变量 --p-spacing 控制，由 MarkdownContent 组件注入） */
+.markdown p {
+  margin: var(--p-spacing, 0.2em) 0;
+}
+.markdown p:first-child { margin-top: 0; }
+.markdown p:last-child  { margin-bottom: 0; }
+
+/* 标题 */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin: 0.8em 0 0.3em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.markdown h1 { font-size: 1.4em; }
+.markdown h2 { font-size: 1.25em; }
+.markdown h3 { font-size: 1.1em; }
+.markdown h4,
+.markdown h5,
+.markdown h6 { font-size: 1em; }
+
+/* 列表 */
+.markdown ul,
+.markdown ol {
+  margin: 0.4em 0;
+  padding-left: 1.5em;
+}
+.markdown li {
+  margin: 0.2em 0;
+}
+.markdown li > p {
+  margin: 0;
+}
+
+/* GFM 任务列表 */
+.markdown input[type='checkbox'] {
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+/* 引用块 */
+.markdown blockquote {
+  margin: 0.5em 0;
+  padding: 0.2em 0.75em;
+  border-left: 3px solid currentColor;
+  opacity: 0.7;
+}
+.markdown blockquote p {
+  margin: 0;
+}
+
+/* 行内代码 */
+.markdown code {
+  padding: 0.15em 0.35em;
+  border-radius: 0.25em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+/* 代码块 */
+.codeWrapper {
+  position: relative;
+  margin: 0.5em 0;
+}
+.codeWrapper:hover .copyBtn {
+  opacity: 1;
+}
+.markdown .codeWrapper pre {
+  margin: 0;
+  padding: 0.75em 1em;
+  padding-right: 4em;
+  border-radius: 0.375em;
+  background: rgba(0, 0, 0, 0.06);
+  overflow-x: auto;
+}
+.markdown pre code {
+  padding: 0;
+  background: transparent;
+  font-size: 0.85em;
+}
+.copyBtn {
+  position: absolute;
+  top: 0.4em;
+  right: 0.4em;
+  padding: 0.35em;
+  border: none;
+  border-radius: 0.25em;
+  background: rgba(0, 0, 0, 0.12);
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.copyBtn:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+.copyBtnCopied {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* 表格（GFM） */
+.markdown table {
+  border-collapse: collapse;
+  margin: 0.5em 0;
+  width: 100%;
+  font-size: 0.9em;
+}
+.markdown th,
+.markdown td {
+  padding: 0.35em 0.65em;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+.markdown th {
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+/* 分割线 */
+.markdown hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  margin: 0.75em 0;
+}
+
+/* 链接 */
+.markdown a {
+  color: inherit;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+.markdown a:hover {
+  opacity: 1;
+}
+
+/* 删除线（GFM） */
+.markdown del {
+  opacity: 0.6;
+}

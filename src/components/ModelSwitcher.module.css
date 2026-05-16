@@ -1,0 +1,155 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 240px;
+  padding: 4px 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.trigger:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.label {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.name {
+  color: #374151;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.arrow {
+  font-size: 8px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* 模型参数配置按钮（齿轮） */
+.settingsBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.settingsBtn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 200px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.providerHeader {
+  padding: 6px 12px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 12px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.option:hover {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.option.active {
+  color: #374151;
+}
+
+.check {
+  color: #2563eb;
+  font-size: 12px;
+}
+
+.divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 2px 0;
+}
+
+.manageButton {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.manageButton:hover {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.empty {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}

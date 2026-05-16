@@ -1,0 +1,1984 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 中间聊天区域 */
+.chatArea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.clearButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  color: #888;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.clearButton:hover {
+  color: #333;
+  border-color: #d1d5db;
+}
+
+/* header 右侧操作区 */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* 对话总览树触发按钮 */
+.treeButton {
+  padding: 0.375rem;
+  color: #888;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.treeButton:hover {
+  color: #3b82f6;
+  border-color: #bfdbfe;
+  background-color: #eff6ff;
+}
+
+.treeButtonActive {
+  color: #3b82f6 !important;
+  border-color: #bfdbfe !important;
+  background-color: #eff6ff !important;
+}
+
+/* 树总览模式：移除 padding 和滚动 */
+.treeMode {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 从树导航到消息时的高亮闪烁动画 */
+:global(.treeNavigateHighlight) {
+  animation: treeNavigateFlash 1.5s ease-out;
+}
+
+@keyframes treeNavigateFlash {
+  0% {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    background-color: rgba(59, 130, 246, 0.08);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    background-color: transparent;
+  }
+}
+
+.systemPromptBubble {
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fbbf24;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.15);
+}
+
+.systemPromptBubbleHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.systemPromptBubbleIcon {
+  font-size: 1.25rem;
+}
+
+.systemPromptBubbleTitle {
+  font-weight: 600;
+  color: #92400e;
+  font-size: 0.95rem;
+}
+
+.systemPromptBubbleContent {
+  color: #78350f;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+/* 右侧信息面板 */
+.rightPanel {
+  position: relative;
+  height: 100vh;
+  background-color: #fafafa;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.rightPanel.collapsed {
+  width: 0;
+  background: transparent;
+  border-left: none;
+  pointer-events: none;
+}
+
+/* 拖拽时禁用 transition，避免滞后感 */
+.rightPanel.resizing {
+  transition: none;
+}
+
+/* 左侧边界：拖拽调宽 + 折叠柄 */
+.leftHandle {
+  position: absolute;
+  top: 0;
+  left: -4px;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+  pointer-events: all;
+}
+
+/* 透明占位 hover 区 */
+.collapseHoverZone {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 48px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 折叠切换按钮（从左边界向左凸出，避开滚动条） */
+.collapseToggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: right center;
+
+  width: 18px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  background-color: #eaecf0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s, background-color 0.15s;
+  z-index: 21;
+  pointer-events: all;
+}
+
+/* 鼠标悬停在面板或 leftHandle 上时，按钮展开 */
+.rightPanel:hover .collapseToggle,
+.leftHandle:hover .collapseToggle {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}
+
+/* 折叠态：按钮始终可见 */
+.rightPanel.collapsed .collapseToggle {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}
+
+.collapseToggle:hover {
+  background-color: #d5d8de;
+  color: #374151;
+}
+
+/* 移除旧的按钮样式 */
+.rightPanelToggle {
+  display: none;
+}
+
+.rightPanelContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rightPanelSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rightPanelSectionTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.rightPanelPrompt {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.rightPanelPromptRole {
+  font-weight: 600;
+  color: #92400e;
+  font-size: 0.875rem;
+}
+
+/* 角色提示词 header（角色名 + 编辑按钮） */
+.rightPanelPromptHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* 编辑按钮 */
+.rightPanelEditBtn {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.rightPanelEditBtn:hover {
+  background: #f5f5f5;
+  border-color: #92400e;
+  color: #92400e;
+}
+
+.rightPanelPromptContent {
+  color: #555;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.rightPanelPromptContent.truncated {
+  max-height: calc(6 * 1.6em);
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.promptExpandControls {
+  margin-top: 0.375rem;
+  text-align: center;
+}
+
+.promptExpandBtn {
+  font-size: 0.75rem;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s;
+}
+
+.promptExpandBtn:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.rightPanelEmpty {
+  color: #999;
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+/* 快捷短语面板 */
+.quickPhraseList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.quickPhraseItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.45rem 0.625rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.quickPhraseItem:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.quickPhraseLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.quickPhraseText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* MCP 面板控件 */
+.mcpToggleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #444;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mcpToggleRow input[type='checkbox'] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  accent-color: #166534;
+}
+
+.mcpPermRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem 0;
+}
+
+.mcpPermRow input[type='checkbox'] {
+  width: 0.875rem;
+  height: 0.875rem;
+  cursor: pointer;
+  accent-color: #166534;
+}
+
+.mcpDirList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.mcpDirItem {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: #f3f4f6;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.mcpDirItemPath {
+  flex: 1;
+  font-size: 0.75rem;
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #374151;
+}
+
+.mcpDirRemoveBtn {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.mcpDirRemoveBtn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.mcpAddDirBtn {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.15s;
+}
+
+.mcpAddDirBtn:hover {
+  border-color: #166534;
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.mcpAddDirBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mcpHint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+/* MCP 工具列表 */
+.mcpToolList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.375rem;
+}
+
+.mcpToolRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #f9fafb;
+}
+
+.mcpToolName {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.mcpToolActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mcpToolToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mcpToolToggle input[type='checkbox'] {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  cursor: pointer;
+  accent-color: #166534;
+}
+
+.mcpToolEditBtn {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.15s;
+}
+
+.mcpToolEditBtn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+/* 目录区块（弹窗内使用） */
+.mcpDirSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mcpDirSectionLabel {
+  font-size: 0.8125rem;
+  color: #555;
+  font-weight: 500;
+}
+
+/* 移除旧的横幅样式（已废弃） */
+.systemPromptBanner {
+  display: none;
+}
+
+.systemPromptLabel {
+  display: none;
+}
+
+.systemPromptText {
+  display: none;
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  position: relative;
+  /* 🐛 修复：禁用浏览器的 overflow-anchor（滚动锚定），防止流式结束时的 DOM
+     重渲染触发浏览器主动调整 scrollTop，将已滚离底部的用户拖回底部。 */
+  overflow-anchor: none;
+}
+
+/* 跟随滚动锁定：隐藏滚动条，防止用户拖拽滚动条 */
+.messagesContainer.scrollLocked {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.messagesContainer.scrollLocked::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+/* 🐛 修复：跟随滚动锁定时，同样隐藏子滚动条（思考链、工具参数等），防止对抗 */
+.scrollLocked [data-auto-scroll] {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.scrollLocked [data-auto-scroll]::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+/* 浮动按钮组：底部由 --input-area-height 动态决定，各按钮间隔 2.5rem */
+.scrollToTopBtn {
+  position: fixed;
+  right: calc(var(--right-panel-width, 320px) + 1rem);
+  bottom: calc(var(--input-area-height, 6rem) + 7.5rem);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.scrollToTopBtn:hover {
+  background: rgba(0, 0, 0, 0.25);
+  color: #333;
+}
+
+/* 上一条 user 消息按钮 */
+.scrollToPrevUserBtn {
+  position: fixed;
+  right: calc(var(--right-panel-width, 320px) + 1rem);
+  bottom: calc(var(--input-area-height, 6rem) + 5rem);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.scrollToPrevUserBtn:hover {
+  background: rgba(0, 0, 0, 0.25);
+  color: #333;
+}
+
+/* 下一条 user 消息按钮 */
+.scrollToNextUserBtn {
+  position: fixed;
+  right: calc(var(--right-panel-width, 320px) + 1rem);
+  bottom: calc(var(--input-area-height, 6rem) + 2.5rem);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.scrollToNextUserBtn:hover {
+  background: rgba(0, 0, 0, 0.25);
+  color: #333;
+}
+
+/* 滚动到底部按钮 */
+.scrollToBottomBtn {
+  position: fixed;
+  right: calc(var(--right-panel-width, 320px) + 1rem);
+  bottom: calc(var(--input-area-height, 6rem) + 0rem);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.scrollToBottomBtn:hover {
+  background: rgba(0, 0, 0, 0.25);
+  color: #333;
+}
+
+/* 跟随滚动按钮 */
+.autoScrollBtn {
+  position: fixed;
+  right: calc(var(--right-panel-width, 320px) + 1rem);
+  bottom: calc(var(--input-area-height, 6rem) + 0rem);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.autoScrollBtn:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.autoScrollBtn.autoScrollOn {
+  background: rgba(37, 99, 235, 0.2);
+  color: #2563eb;
+}
+
+.autoScrollBtn.autoScrollOn:hover {
+  background: rgba(37, 99, 235, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.emptyState {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.emptyStateContent {
+  text-align: center;
+}
+
+.emptyStateTitle {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.emptyStateText {
+  font-size: 0.875rem;
+}
+
+/* ── 流式结束横幅（视图与执行分支分离时提示） ──────────── */
+
+.streamEndBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin: 0 auto 8px;
+  max-width: 48rem;
+  background: rgba(34, 197, 94, 0.08);
+  border-left: 3px solid #22c55e;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  animation: bannerSlideIn 0.3s ease-out;
+}
+
+.streamEndBannerIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.streamEndBannerText {
+  flex: 1;
+  color: #374151;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.streamEndBannerPreview {
+  color: #9ca3af;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.streamEndBannerAction {
+  padding: 4px 12px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.streamEndBannerAction:hover {
+  background: #16a34a;
+}
+
+.streamEndBannerDismiss {
+  padding: 2px 6px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.streamEndBannerDismiss:hover {
+  color: #6b7280;
+}
+
+@keyframes bannerSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.messagesList {
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+/* 渐进式加载：加载更多入口 */
+.loadMoreWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.loadMoreBtn {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.loadMoreBtn:hover {
+  color: #374151;
+  border-color: #9ca3af;
+}
+
+.messageWrapper {
+  display: flex;
+}
+
+.messageWrapper.system {
+  justify-content: center;
+}
+
+/* Group: bubble + action buttons stacked vertically */
+.messageGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.message {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.message.user {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.message.assistant {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  color: #111;
+}
+
+.message.system {
+  background-color: #fef9c3;
+  border: 1px solid #fde68a;
+  color: #78350f;
+  font-style: italic;
+}
+
+/* system 消息在树中使用 systemPromptBubble 样式时，去掉外层背景/边框/斜体 */
+.message.systemPromptMessage {
+  background: none;
+  border: none;
+  color: inherit;
+  font-style: normal;
+  padding: 0;
+}
+
+.messageWrapper.tool {
+  justify-content: flex-start;
+  padding-left: 1rem;
+}
+
+.message.tool {
+  background-color: #f0fdf4;
+  border: 1px solid #d1fae5;
+  color: #065f46;
+  max-width: 80%;
+}
+
+.messageContent {
+  word-break: break-word;
+}
+
+/* 🟢 工具调用生成中但尚无可见内容时的加载占位 */
+.agentLoading {
+  color: #999;
+  font-style: italic;
+  padding: 4px 0;
+  animation: agentPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes agentPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.messagePara {
+  margin: 0;
+  word-break: break-word;
+}
+
+.messagePara + .messagePara {
+  margin-top: 0.75em;
+}
+
+.messageFooter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.roleTag {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.messageTime {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.messageModel {
+  font-size: 0.7rem;
+  opacity: 0.45;
+  font-family: monospace;
+}
+
+.messageStats {
+  font-size: 0.7rem;
+  opacity: 0.45;
+  margin-left: auto;
+}
+
+/* Action icon buttons — outside the bubble, shown on hover */
+.messageActions {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.2rem 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.messageWrapper:hover .messageActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.messageActions button {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  color: #555;
+  opacity: 0.75;
+  transition: opacity 0.1s, background 0.1s;
+  line-height: 1;
+}
+
+.messageActions button:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.deleteBtn {
+  color: #dc2626 !important;
+}
+
+/* 分支指示器按钮 */
+.branchIndicator {
+  font-size: 0.65rem !important;
+  font-weight: 600;
+  color: #6366f1 !important;
+  background: rgba(99, 102, 241, 0.1) !important;
+  white-space: nowrap;
+  padding: 0 0.35rem !important;
+  min-width: auto !important;
+  letter-spacing: 0.02em;
+}
+
+.branchIndicatorDisabled {
+  opacity: 0.4;
+  cursor: default !important;
+}
+
+/* Editing state: flex column so textarea stretches to fill bubble */
+.message.editing {
+  display: flex;
+  flex-direction: column;
+}
+
+.message.editing .editTextarea {
+  min-height: 1.6em;
+  resize: none;
+  overflow-y: auto;
+}
+
+/* Inline edit controls */
+.editTextarea {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+  overflow-y: auto;
+  /* 编辑时尽可能填充气泡高度 */
+  flex: 1;
+}
+
+.message.user .editTextarea {
+  border-color: #93c5fd;
+  background: rgba(255, 255, 255, 0.6);
+  color: #1e40af;
+}
+
+.message.assistant .editTextarea {
+  border-color: #d1d5db;
+  background: #f9fafb;
+  color: #111;
+}
+
+.message.system .editTextarea {
+  border-color: #fbbf24;
+  background: #fffbeb;
+  color: #78350f;
+}
+
+.editActions {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.editSaveBtn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0.25rem;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.editSaveBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.message.user .editSaveBtn,
+.message.assistant .editSaveBtn,
+.message.system .editSaveBtn {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.message.user .editSaveBtn:hover,
+.message.assistant .editSaveBtn:hover,
+.message.system .editSaveBtn:hover {
+  background: #1d4ed8;
+}
+
+.editSaveOnlyBtn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+
+.editSaveOnlyBtn:hover {
+  opacity: 1;
+}
+
+.editCancelBtn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.editCancelBtn:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   编辑模式选项卡
+   ============================================================ */
+
+.editTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.editTab {
+  flex: 1;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.55;
+  transition: opacity 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.editTab:hover {
+  opacity: 0.8;
+}
+
+.editTab.editTabActive {
+  opacity: 1;
+  border-bottom-color: currentColor;
+  font-weight: 600;
+}
+
+.inputContainer {
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+  padding: 0.5rem 1.5rem 1rem;
+}
+
+.sessionStats {
+  max-width: 48rem;
+  margin: 0 auto;
+  font-size: 0.75rem;
+  color: #999;
+  padding-bottom: 0.375rem;
+  text-align: right;
+}
+
+/* 输入框上方工具栏（思考切换等） */
+.inputToolbar {
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 0.375rem;
+}
+
+/* 思考模式切换按钮 */
+.thinkingToggle {
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  border: 1px solid #d1d5db;
+  border-radius: 0.3125rem;
+  cursor: pointer;
+  background-color: #f9fafb;
+  color: #6b7280;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.thinkingToggle:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.thinkingToggleOn {
+  background-color: #ecfdf5;
+  border-color: #6ee7b7;
+  color: #059669;
+}
+
+.thinkingToggleOn:hover {
+  background-color: #d1fae5;
+  border-color: #34d399;
+  color: #047857;
+}
+
+.thinkingToggleOff {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.thinkingToggleOff:hover {
+  background-color: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}
+
+.inputForm {
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.5;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  min-height: 5.5rem;
+  max-height: 10rem;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  padding: 0.5rem 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.submitButton:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.stopButton {
+  padding: 0.5rem 1.5rem;
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.stopButton:hover {
+  background-color: #b91c1c;
+}
+
+.importButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: #666;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.importButton:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #333;
+}
+
+.importButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dragOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(37, 99, 235, 0.08);
+  border: 2px dashed #2563eb;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dragOverlayContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2563eb;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.dragOverlayTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dragOverlayHint {
+  font-size: 0.8125rem;
+  color: rgba(37, 99, 235, 0.65);
+  font-weight: 400;
+}
+
+.fileMessageBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   角色提示词编辑弹窗（内容样式，结构由 Modal 组件提供）
+   ============================================================ */
+
+.promptEditField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.promptEditField label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.promptEditRoleName {
+  padding: 0.625rem 0.875rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.promptEditTextarea {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 200px;
+  transition: border-color 0.15s;
+}
+
+.promptEditTextarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.promptEditCancel,
+.promptEditSave {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.promptEditCancel {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.promptEditCancel:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.promptEditSave {
+  background: #3b82f6;
+  border: none;
+  color: white;
+}
+
+.promptEditSave:hover {
+  background: #2563eb;
+}
+
+/* ============================================================
+   思考链（Reasoning）展示块
+   ============================================================ */
+
+.reasoningBlock {
+  margin-bottom: 0.5rem;
+  border: 1px solid #e0e7ff;
+  border-radius: 0.5rem;
+  background: #f5f7ff;
+  overflow: hidden;
+}
+
+.reasoningHeader {
+  display: flex;
+  align-items: stretch;
+}
+
+.reasoningToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: #6366f1;
+  text-align: left;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.reasoningCopyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  min-width: 2rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid #e0e7ff;
+  color: #818cf8;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.reasoningCopyBtn:hover {
+  background: #eef0ff;
+  color: #6366f1;
+}
+
+.reasoningToggle:hover {
+  background: #eef0ff;
+}
+
+.reasoningArrow {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+  color: #818cf8;
+}
+
+.reasoningArrowOpen {
+  transform: rotate(90deg);
+}
+
+.reasoningContent {
+  padding: 0.625rem 0.875rem 0.75rem;
+  border-top: 1px solid #e0e7ff;
+  font-size: 0.8125rem;
+  color: #4b5563;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   MCP 工具调用 & 工具结果展示块
+   ============================================================ */
+
+/* 工具调用块（在 assistant 消息内，置于正文之后，toolCalls 不为空时显示，可折叠展开查看完整参数） */
+.toolCallsBlock {
+  margin-top: 0.5rem;
+  border: 1px solid #d1fae5;
+  border-radius: 0.5rem;
+  background: #f0fdf4;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolCallItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolCallItem + .toolCallItem {
+  border-top: 1px solid #d1fae5;
+}
+
+/* 工具调用 + 结果容器（内联模式） */
+.toolCallWithResult {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolCallWithResult + .toolCallWithResult {
+  border-top: 1px solid #d1fae5;
+}
+
+/* 内联工具结果（在 toolCall 和结果之间有一条分割线的感觉） */
+.toolResultInline {
+  border-top: 1px solid #d1fae5;
+  padding: 0.375rem 0.75rem 0.5rem;
+  background: #f9fafb;
+}
+
+/* 工具调用折叠按钮（类似 reasoningToggle） */
+.toolCallToggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  width: 100%;
+  padding: 0.375rem 0.625rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  text-align: left;
+  user-select: none;
+  transition: background 0.15s;
+  color: inherit;
+}
+
+.toolCallToggle:hover {
+  background: #d1fae5;
+}
+
+.toolCallArrow {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.toolCallArrowOpen {
+  transform: rotate(90deg);
+}
+
+.toolCallIcon {
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.toolCallName {
+  color: #065f46;
+  font-weight: 600;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+/* 实时调用指示点（流式/工具执行期间闪烁） */
+.toolCallLiveDot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  flex-shrink: 0;
+  align-self: center;
+  animation: toolCallLivePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes toolCallLivePulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+.toolCallArgsPreview {
+  color: #6b7280;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* 展开后的完整参数（键值对格式化展示） */
+.toolCallArgsFull {
+  margin: 0;
+  padding: 0.5rem 0.875rem 0.625rem;
+  border-top: 1px solid #d1fae5;
+  background: #ecfdf5;
+  font-size: 0.75rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 16rem;
+  overflow-y: auto;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* 参数键值对列表 */
+.argsKeyValueList {
+  margin: 0;
+  padding: 0.5rem 0.875rem 0.625rem;
+  border-top: 1px solid #d1fae5;
+  background: #ecfdf5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.argsKVRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.argsKVKey {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #059669;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.argsKVValue {
+  margin: 0;
+  font-family: monospace;
+  font-size: 0.8125rem;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  line-height: 1.5;
+}
+
+/* 工具结果消息（role: 'tool' 消息） */
+.toolResultBlock {
+  width: 100%;
+}
+
+.toolResultHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+}
+
+.toolResultIconOk {
+  color: #059669;
+  font-weight: 700;
+}
+
+.toolResultIconError {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.toolResultName {
+  color: #374151;
+  font-family: monospace;
+  font-size: 0.8125rem;
+}
+
+/* 内联工具结果操作按钮（仅 assistant 内嵌模式可见） */
+.toolResultActions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.toolResultActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #6b7280;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+
+.toolResultActionBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.toolResultContent {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 12rem;
+  overflow-y: auto;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* 工具结果折叠容器 */
+.toolResultCollapsed {
+  position: relative;
+}
+
+/* 工具结果展开按钮 */
+.toolResultExpandBtn {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  margin-top: 0.25rem;
+  background: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toolResultExpandBtn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ── 多分支删除确认弹窗 ─────────────────────────── */
+.modalBody {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.modalCancel {
+  padding: 6px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.modalCancel:hover {
+  background-color: #f3f4f6;
+}
+
+.modalConfirm {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ef4444;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.modalConfirm:hover {
+  background-color: #dc2626;
+}
+
+/* ============================================================
+   右键菜单（Context Menu）— 消息气泡右键
+   ============================================================ */
+
+.contextMenuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.contextMenu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 140px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 4px 0;
+  animation: contextMenuFadeIn 0.12s ease-out;
+}
+
+@keyframes contextMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.contextMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s;
+}
+
+.contextMenuItem:hover {
+  background-color: #f3f4f6;
+}
+
+.contextMenuItem:active {
+  background-color: #e5e7eb;
+}
+
+.contextMenuIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.contextMenuDanger {
+  color: #dc2626;
+}
+
+.contextMenuDanger:hover {
+  background-color: #fef2f2;
+}
+
+.contextMenuDanger:active {
+  background-color: #fee2e2;
+}
+
+.contextMenuDanger .contextMenuIcon {
+  color: #ef4444;
+}
+
+.contextMenuDivider {
+  height: 1px;
+  margin: 4px 8px;
+  background-color: #e5e7eb;
+}

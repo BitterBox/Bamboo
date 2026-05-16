@@ -1,0 +1,18 @@
+{
+  "name": "analyze_code",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "code",
+  "function": {
+    "description": "分析 TypeScript/JavaScript 源文件：列出导入、函数、类、接口、类型别名，并计算圈复杂度。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "description": "要分析的源文件的绝对路径" }
+      },
+      "required": ["path"]
+    }
+  },
+  "executor": "builtin:analyze_code",
+  "permissions": ["allowRead", "pathInAllowedDirs"]
+}

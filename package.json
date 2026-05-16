@@ -1,0 +1,64 @@
+{
+  "name": "bamboo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "竹 - 轻量级 LLM 聊天应用",
+  "license": "MIT",
+  "author": "BitterBox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BitterBox/Bamboo"
+  },
+  "homepage": "https://github.com/BitterBox/Bamboo#readme",
+  "keywords": ["llm", "chat", "electron", "react", "ai", "mcp", "typescript"],
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "dev:electron": "node -e \"process.platform==='win32'&&require('child_process').execSync('chcp 65001',{stdio:'ignore'})\" && cross-env NODE_ENV=development electron .",
+    "build": "tsc -b && vite build",
+    "build:electron": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "jszip": "^3.10.1",
+    "katex": "^0.16.34",
+    "openai": "^6.25.0",
+    "pdfjs-dist": "^5.5.207",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.1",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-cjk-friendly": "^2.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "cross-env": "^10.1.0",
+    "electron": "^40.6.1",
+    "electron-builder": "^26.8.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1"
+  },
+  "build": {
+    "appId": "com.bamboo",
+    "productName": "竹",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "fetch_url",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "web",
+  "function": {
+    "description": "通过 HTTP/HTTPS 访问指定的 URL，获取网页内容或网络文件（仅 GET 请求）。自动跟随重定向（最多 5 次），返回文本内容。适合读取在线文档、API 响应、公开数据集等场景。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "description": "要访问的 URL（必须以 http:// 或 https:// 开头）。" },
+        "timeout": { "type": "number", "description": "超时时间（秒），默认 30，上限 60。超过此时间未完成响应的请求将被中断。" },
+        "max_size": { "type": "number", "description": "最大响应大小（字节），默认 500000（约 500KB），上限 5000000（5MB）。超过此大小的响应将被截断。" },
+        "strip_html": { "type": "boolean", "description": "是否剥离 HTML 标签，仅返回纯文本内容。默认 true（剥离），设为 false 时返回原始 HTML。对 JSON/XML/纯文本响应无效。" }
+      },
+      "required": ["url"]
+    }
+  },
+  "executor": "builtin:fetch_url",
+  "permissions": ["webToolEnabled", "allowRead"]
+}

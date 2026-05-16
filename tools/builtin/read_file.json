@@ -1,0 +1,20 @@
+{
+  "name": "read_file",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "file",
+  "function": {
+    "description": "读取给定绝对路径下的文件文本内容。支持通过 offset 和 limit 读取指定行范围。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "description": "要读取的文件的绝对路径" },
+        "offset": { "type": "number", "description": "从第几行开始读取（1-based，默认 1，从头开始）" },
+        "limit": { "type": "number", "description": "最多读取多少行（默认 75；与 offset 配合使用可实现分页读取）" }
+      },
+      "required": ["path"]
+    }
+  },
+  "executor": "builtin:read_file",
+  "permissions": ["allowRead", "pathInAllowedDirs"]
+}

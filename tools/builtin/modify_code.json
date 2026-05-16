@@ -1,0 +1,20 @@
+{
+  "name": "modify_code",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "code",
+  "function": {
+    "description": "精确替换文件中的代码片段。修改暂存到缓冲区，需调用 batch_commit 后原子生效（需同时提供三个参数：path、old_string、new_string）",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "description": "要修改的文件的绝对路径" },
+        "old_string": { "type": "string", "description": "要查找并替换的精确字符串（必须与文件内容完全一致，包括空格和换行符）" },
+        "new_string": { "type": "string", "description": "替换后的新字符串" }
+      },
+      "required": ["path", "old_string", "new_string"]
+    }
+  },
+  "executor": "builtin:modify_code",
+  "permissions": ["allowWrite", "pathInAllowedDirs"]
+}

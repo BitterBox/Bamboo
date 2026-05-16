@@ -1,0 +1,223 @@
+/* ============================================================
+   JsonViewer — 交互式 JSON 结构展示
+   视觉风格参考 Chat.tsx 中的工具调用参数键值对列表
+   ============================================================ */
+
+.viewer {
+  font-family: 'Consolas', 'Menlo', 'Monaco', 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d4d4d4;
+}
+
+/* ── 空状态 ──────────────────────────────────────────────── */
+.empty {
+  color: #888;
+  font-style: italic;
+  padding: 1rem;
+}
+
+/* ── 最外层节点无 padding，子节点缩进 ───────────────────── */
+.children {
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  margin-left: 0.125rem;
+}
+
+/* ── 折叠/展开按钮 ────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 扁平对象（全部基本类型，无折叠按钮） */
+.flatSection {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+}
+
+.toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  width: 100%;
+  padding: 0.2rem 0.375rem;
+  background: none;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* 箭头图标 */
+.arrow {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+  color: #82aaff;
+  flex-shrink: 0;
+  width: 1em;
+  text-align: center;
+}
+
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
+/* 键名（section 标题） */
+.sectionKey {
+  color: #82aaff;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* 元信息：类型 + 长度 */
+.sectionMeta {
+  color: #666;
+  font-size: 0.8125rem;
+  margin-left: 0.25rem;
+}
+
+/* ── 键值对列表（dl 风格，参考 tool call 参数展示）─────── */
+.kvList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  margin-left: 0.125rem;
+}
+
+/* 单行键值对：用于基本类型 */
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.1rem 0.375rem;
+  border-radius: 0.25rem;
+  transition: background 0.12s;
+}
+
+.row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* 键名（基本类型行的 label） */
+.key {
+  color: #82aaff;
+  font-weight: 500;
+  flex-shrink: 0;
+  min-width: 6rem;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 值样式 ────────────────────────────────────────────── */
+
+/* 字符串值 */
+.valueStr {
+  color: #ce9178;
+  word-break: break-all;
+}
+
+/* 引号（比字符串内容稍淡） */
+.strQuotes {
+  color: #a08070;
+  user-select: none;
+}
+
+.longStr {
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.25rem;
+  padding: 0 0.125rem;
+  margin: 0 -0.125rem;
+  transition: background 0.12s;
+}
+
+.longStr:hover {
+  background: rgba(206, 145, 120, 0.1);
+}
+
+.longStrExpanded {
+  word-break: break-all;
+}
+
+.strToggleHint {
+  font-size: 0.6875rem;
+  color: #888;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* 数值 */
+.valueNum {
+  color: #b5cea8;
+}
+
+/* 布尔值 */
+.valueBool {
+  color: #569cd6;
+}
+
+/* null */
+.valueNull {
+  color: #808080;
+  font-style: italic;
+}
+
+/* 类型标签（空数组/空对象） */
+.valueType {
+  color: #666;
+  font-style: italic;
+}
+
+/* 内联数组 */
+.valueInline {
+  color: #d4d4d4;
+}
+
+.sep {
+  color: #666;
+}
+
+/* 兜底 */
+.valueRaw {
+  color: #d4d4d4;
+}
+
+/* ── 数组项 ────────────────────────────────────────────── */
+.arrayItem {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.1rem 0;
+}
+
+.arrayIndex {
+  color: #6a9955;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  min-width: 1.5rem;
+  text-align: right;
+  padding-top: 0.15rem;
+  user-select: none;
+}
+
+.arrayValue {
+  flex: 1;
+  min-width: 0;
+}

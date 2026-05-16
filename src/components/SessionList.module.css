@@ -1,0 +1,577 @@
+/* ============================================================
+   SessionList 样式
+   ============================================================ */
+
+/* ── 外层容器（展开态） ── */
+.wrapper {
+  position: relative;
+  height: 100%;
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  /* overflow 保持 visible，使右侧凸起可超出容器范围显示 */
+  overflow: visible;
+}
+
+/* ── 折叠态：宽度归零，背景/边框消除，内容事件穿透 ── */
+.wrapperCollapsed {
+  width: 0;
+  background: transparent;
+  border-right: none;
+  pointer-events: none;
+}
+
+/* ── 顶部区域 ── */
+.header {
+  padding: 16px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ── 新建会话按钮 ── */
+.createButton {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background-color: #3b82f6;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.2s;
+}
+
+.createButton:hover {
+  background-color: #2563eb;
+}
+
+.createIcon {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ── 会话列表 ── */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 6px;
+}
+
+/* ── 智能体组容器 ── */
+.agentGroup {
+  margin-bottom: 2px;
+}
+
+/* ── 智能体组标题行 ── */
+.agentGroupHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s;
+}
+
+.agentGroupHeader:hover {
+  background-color: #f3f4f6;
+}
+
+.agentGroupHeader:hover .groupCreateBtn {
+  opacity: 1;
+}
+
+/* ── 折叠箭头 ── */
+.chevron {
+  flex-shrink: 0;
+  color: #9ca3af;
+  transition: transform 0.2s;
+}
+
+.chevronCollapsed {
+  transform: rotate(-90deg);
+}
+
+/* ── 智能体名称 ── */
+.agentGroupName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 会话数量徽标 ── */
+.agentGroupCount {
+  font-size: 11px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* ── 智能体组内新建按钮 ── */
+.groupCreateBtn {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s, background-color 0.15s, color 0.15s;
+}
+
+.groupCreateBtn:hover {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+/* ── 角色组内会话列表 ── */
+.groupSessions {
+  padding-left: 8px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* 折叠态：隐藏会话列表（仅透明，不改变布局高度，避免与 framer-motion layout 动画冲突） */
+.groupSessionsCollapsed {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  /* 无 transition — 高度由 framer-motion 的 layout="position" 统一处理，
+     避免 CSS 过渡与 framer-motion 布局动画同时运行产生冲突 */
+}
+
+/* ── 会话项 ── */
+.sessionItem {
+  padding: 12px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.sessionItem:hover {
+  background-color: #f3f4f6;
+}
+
+.sessionItem.active {
+  background-color: #dbeafe;
+}
+
+/* ── 关注（星标）会话：浅金色背景 ── */
+.sessionItem.starred {
+  background-color: #fffbeb;
+}
+
+.sessionItem.starred:hover {
+  background-color: #fef3c7;
+}
+
+.sessionItem.starred.active {
+  background-color: #fde68a;
+}
+
+/* ── 星标图标 ── */
+.starIcon {
+  flex-shrink: 0;
+  color: #f59e0b;
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ── 右键菜单星标图标 ── */
+.starMenuIcon {
+  color: #f59e0b !important;
+  font-size: 16px !important;
+}
+
+/* ── 会话标题区域 ── */
+.sessionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.sessionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* ── 流式加载指示器（绿色脉冲圆点）── */
+.streamingSpinner {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* ── 工具执行指示器（琥珀色脉冲圆点，与会话内 toolCallLiveDot 统一）── */
+.agentRunningIndicator {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ── 排队等待指示器（红色脉冲圆点，与会话内排队态统一）── */
+.queuedIndicator {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.75); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ── 未读指示器（静态蓝色圆点，无脉冲动画，保持安静）── */
+.unreadDot {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+}
+
+/* ── 重命名输入框 ── */
+.editInput {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+}
+
+/* ── 会话元信息 ── */
+.sessionMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ============================================================
+   右侧边界：拖拽调宽 + 隐藏式折叠柄
+   ============================================================ */
+
+/* 可拖拽的右侧边缘条（跨越边界 ±4px） */
+.sideHandle {
+  position: absolute;
+  top: 0;
+  /* right: -4px 使其横跨右边界：4px 在容器内，4px 在容器外 */
+  right: -4px;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+  pointer-events: all; /* 折叠态 pointer-events:none 的子元素重新接收事件 */
+}
+
+/*
+ * 透明占位 hover 区：与 collapseToggle 完全重合。
+ * 当折叠柄处于 scaleX(0)（hit area=0）时，鼠标移入此区域
+ * 仍能触发 .sideHandle:hover，使折叠柄展开。
+ * onMouseDown stopPropagation 防止误触发 resize。
+ */
+.collapseHoverZone {
+  position: absolute;
+  left: 4px;           /* 与 collapseToggle 对齐 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;         /* 与 collapseToggle 等宽 */
+  height: 48px;        /* 与 collapseToggle 等高 */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 折叠切换按钮（从边界向右凸出的圆头标签） */
+.collapseToggle {
+  position: absolute;
+  /*
+   * left: 4px = sideHandle 左端(wrapper.right-4px) + 4px = wrapper.right
+   * 即从 wrapper 右侧边框处长出，与边框相连
+   */
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left center;
+
+  width: 18px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid #e5e7eb; /* 与 wrapper border-right 同色，视觉连续 */
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  background-color: #eaecf0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s, background-color 0.15s;
+}
+
+/* 鼠标悬停在 wrapper 或 sideHandle（含折叠柄自身）上时，凸起展开 */
+.wrapper:hover .collapseToggle,
+.sideHandle:hover .collapseToggle {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}
+
+/* 折叠态：凸起始终可见（指示可展开） */
+.wrapperCollapsed .collapseToggle {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}
+
+.collapseToggle:hover {
+  background-color: #d5d8de;
+  color: #374151;
+}
+
+/* ============================================================
+   右键菜单遮罩层：全屏透明，点击关闭菜单
+   与菜单同时出现/消失，避免使用 document 事件监听带来的时序竞争
+   ============================================================ */
+
+.contextMenuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  /* 完全透明，不干扰视觉，仅用于拦截鼠标事件 */
+}
+
+/* ============================================================
+   右键菜单（Context Menu）
+   ============================================================ */
+
+.contextMenu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 140px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 4px 0;
+  animation: contextMenuFadeIn 0.12s ease-out;
+}
+
+@keyframes contextMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.contextMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s;
+}
+
+.contextMenuItem:hover {
+  background-color: #f3f4f6;
+}
+
+.contextMenuItem:active {
+  background-color: #e5e7eb;
+}
+
+.contextMenuIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.contextMenuDanger {
+  color: #dc2626;
+}
+
+.contextMenuDanger:hover {
+  background-color: #fef2f2;
+}
+
+.contextMenuDanger:active {
+  background-color: #fee2e2;
+}
+
+.contextMenuDanger .contextMenuIcon {
+  color: #ef4444;
+}
+
+/* ── 右键菜单分隔线 ── */
+.contextMenuDivider {
+  height: 1px;
+  margin: 4px 8px;
+  background-color: #e5e7eb;
+}
+
+/* ── 右键菜单「移动到」子菜单 ── */
+.contextMenuMoveTo {
+  position: relative;
+}
+
+.contextMenuArrow {
+  font-size: 9px;
+  color: #9ca3af;
+  margin-left: auto;
+}
+
+.contextMenuSubmenu {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: -6px;
+  min-width: 140px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px 0;
+  z-index: 1001;
+  animation: contextMenuFadeIn 0.1s ease-out;
+}
+
+.contextMenuMoveTo:hover .contextMenuSubmenu {
+  display: block;
+}
+
+.contextMenuSubmenuFlipped {
+  top: auto;
+  bottom: -6px;
+}
+
+.contextMenuSubmenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background-color 0.12s;
+}
+
+.contextMenuSubmenuItem:hover {
+  background-color: #f0f5ff;
+  color: #1d4ed8;
+}
+
+.contextMenuSubmenuItem:active {
+  background-color: #dbeafe;
+}
+
+/* ============================================================
+   删除确认对话框（内容样式，结构由 Modal 组件提供）
+   ============================================================ */
+
+.modalBody {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.modalSessionName {
+  font-weight: 500;
+  color: #111827;
+}
+
+.modalCancel {
+  padding: 6px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.modalCancel:hover {
+  background-color: #f3f4f6;
+}
+
+.modalConfirm {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ef4444;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.modalConfirm:hover {
+  background-color: #dc2626;
+}

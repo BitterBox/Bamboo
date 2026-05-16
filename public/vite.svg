@@ -1,0 +1,240 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- ═══════════ 左竹路径数据 ═══════════ -->
+    <path id="ls1" d="M 168 371 Q 173 405 175 440 L 185 440 Q 180 405 178 371 Z"/>
+    <path id="ls2" d="M 162 294 Q 166 328 168 363 L 178 363 Q 174 328 172 294 Z"/>
+    <path id="ls3" d="M 165 217 Q 165 251 162 286 L 172 286 Q 172 251 175 217 Z"/>
+    <path id="ls4" d="M 178 140 Q 173 174 165 209 L 175 209 Q 180 174 188 140 Z"/>
+    <path id="ls5" d="M 180 85 Q 179 108 177 132 L 187 132 Q 185 108 186 85 Z"/>
+    <!-- ═══════════════ 左竹竹叶 ═══════════════ -->
+    <!-- 左竹第1节（y≈367，从左到右第1片→左上） -->
+    <path id="ll1" d="M 156 362 Q 128 340 106 312 Q 140 338 158 364 Z"/>
+    <!-- 左竹第1节第2片→左中 -->
+    <path id="ll2" d="M 156 362 Q 126 358 106 356 Q 140 360 158 364 Z"/>
+    <!-- 左竹第1节第3片→左下 -->
+    <path id="ll3" d="M 156 362 Q 130 376 112 388 Q 140 370 158 366 Z"/>
+    <!-- 左竹第1节第4片→下 -->
+    <path id="ll4" d="M 156 362 Q 135 380 128 398 Q 144 378 158 366 Z"/>
+    <!-- 左竹第2节（y≈290）第1片→左上 -->
+    <path id="ll5" d="M 150 285 Q 122 262 100 234 Q 134 260 152 287 Z"/>
+    <!-- 左竹第2节第2片→左中 -->
+    <path id="ll6" d="M 150 285 Q 122 280 104 278 Q 136 280 152 287 Z"/>
+    <!-- 左竹第2节第3片→左下 -->
+    <path id="ll7" d="M 150 285 Q 126 300 108 312 Q 136 296 152 289 Z"/>
+    <!-- 左竹第2节第4片→下 -->
+    <path id="ll8" d="M 150 285 Q 130 298 122 318 Q 138 296 152 289 Z"/>
+    <!-- 左竹第3节（y≈213）第1片→左上 -->
+    <path id="ll9" d="M 153 208 Q 125 186 104 162 Q 136 188 155 210 Z"/>
+    <!-- 左竹第3节第2片→左中 -->
+    <path id="llA" d="M 153 208 Q 126 206 110 204 Q 138 206 155 210 Z"/>
+    <!-- 左竹第3节第3片→左下 -->
+    <path id="llB" d="M 153 208 Q 128 222 112 234 Q 140 216 155 210 Z"/>
+
+    <!-- ═══════════════ 中竹竹叶 ═══════════════ -->
+    <!-- 中竹顶部第1片→左上 -->
+    <path id="ml1" d="M 232 104 Q 208 86 194 64 Q 220 88 234 104 Z"/>
+    <!-- 中竹顶部第2片→右上 -->
+    <path id="ml2" d="M 268 104 Q 292 86 306 64 Q 280 88 266 104 Z"/>
+    <!-- 中竹顶部第3片→上中 -->
+    <path id="ml3" d="M 244 102 Q 236 82 232 62 Q 244 84 246 102 Z"/>
+    <!-- 中竹第1节（y≈144）第1片→左 -->
+    <path id="ml4" d="M 236 138 Q 218 122 200 106 Q 226 124 238 140 Z"/>
+    <!-- 中竹第1节第2片→右 -->
+    <path id="ml5" d="M 272 138 Q 290 122 308 106 Q 282 124 270 140 Z"/>
+    <!-- 中竹第2节（y≈220）第1片→左 -->
+    <path id="ml6" d="M 245 215 Q 226 200 212 184 Q 234 200 247 217 Z"/>
+    <!-- 中竹第2节第2片→右 -->
+    <path id="ml7" d="M 281 215 Q 300 200 314 184 Q 292 200 279 217 Z"/>
+    <!-- 中竹第2节第3片→上中 -->
+    <path id="ml8" d="M 257 212 Q 250 196 248 180 Q 256 198 259 212 Z"/>
+    <!-- 中竹第3节（y≈296）第1片→左 -->
+    <path id="ml9" d="M 248 290 Q 226 274 210 256 Q 236 276 250 292 Z"/>
+    <!-- 中竹第3节第2片→右 -->
+    <path id="mlA" d="M 284 290 Q 306 274 322 256 Q 296 276 282 292 Z"/>
+    <!-- 中竹第3节第3片→上中 -->
+    <path id="mlB" d="M 260 288 Q 254 274 252 258 Q 260 276 262 288 Z"/>
+
+    <!-- ═══════════════ 右竹竹叶 ═══════════════ -->
+    <!-- 右竹第1节（y≈367）第1片→右上 -->
+    <path id="rl1" d="M 356 362 Q 384 340 406 312 Q 372 338 354 364 Z"/>
+    <!-- 右竹第1节第2片→右中 -->
+    <path id="rl2" d="M 356 362 Q 386 358 406 356 Q 374 360 354 364 Z"/>
+    <!-- 右竹第1节第3片→右下 -->
+    <path id="rl3" d="M 356 362 Q 382 376 400 388 Q 372 370 354 366 Z"/>
+    <!-- 右竹第1节第4片→下 -->
+    <path id="rl4" d="M 356 362 Q 377 380 384 398 Q 368 378 354 366 Z"/>
+    <!-- 右竹第2节（y≈290）第1片→右上 -->
+    <path id="rl5" d="M 360 290 Q 388 268 410 240 Q 376 266 358 292 Z"/>
+    <!-- 右竹第2节第2片→右中 -->
+    <path id="rl6" d="M 360 290 Q 386 284 404 282 Q 374 284 358 292 Z"/>
+    <!-- 右竹第2节第3片→右下 -->
+    <path id="rl7" d="M 360 290 Q 380 306 398 318 Q 370 302 358 292 Z"/>
+    <!-- 右竹第2节第4片→下 -->
+    <path id="rl8" d="M 360 290 Q 382 300 390 320 Q 370 298 358 292 Z"/>
+    <!-- 右竹第3节（y≈213）第1片→右上 -->
+    <path id="rl9" d="M 355 213 Q 380 190 398 168 Q 372 192 353 215 Z"/>
+    <!-- 右竹第3节第2片→右中 -->
+    <path id="rlA" d="M 355 213 Q 378 208 394 206 Q 366 208 353 215 Z"/>
+    <!-- 右竹第3节第3片→右下 -->
+    <path id="rlB" d="M 355 213 Q 376 228 392 240 Q 366 224 353 215 Z"/>
+
+    <!-- ═══════════ 遮挡遮罩 ═══════════ -->
+    <mask id="mask-left">
+      <rect width="512" height="512" fill="white"/>
+      <!-- 中竹遮挡区域 -->
+      <g transform="rotate(-5, 256, 280)">
+        <use href="#ms1" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#ms2" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#ms3" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#ms4" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#ms5" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#ml1" fill="black"/>
+        <use href="#ml2" fill="black"/>
+        <use href="#ml3" fill="black"/>
+        <use href="#ml4" fill="black"/>
+        <use href="#ml5" fill="black"/>
+        <use href="#ml6" fill="black"/>
+        <use href="#ml7" fill="black"/>
+        <use href="#ml8" fill="black"/>
+        <use href="#ml9" fill="black"/>
+        <use href="#mlA" fill="black"/>
+        <use href="#mlB" fill="black"/>
+      </g>
+      <!-- 右竹遮挡区域 -->
+      <g transform="rotate(-14, 340, 290)">
+        <use href="#rs1" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#rs2" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#rs3" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#rs4" fill="black" stroke="black" stroke-width="1"/>
+        <use href="#rl1" fill="black"/>
+        <use href="#rl2" fill="black"/>
+        <use href="#rl3" fill="black"/>
+        <use href="#rl4" fill="black"/>
+        <use href="#rl5" fill="black"/>
+        <use href="#rl6" fill="black"/>
+        <use href="#rl7" fill="black"/>
+        <use href="#rl8" fill="black"/>
+        <use href="#rl9" fill="black"/>
+        <use href="#rlA" fill="black"/>
+        <use href="#rlB" fill="black"/>
+      </g>
+    </mask>
+  </defs>
+
+  <!-- ═══════════════ 第1层：右竹（最后面，左倾14°）═══════════════ -->
+  <g transform="rotate(-14, 340, 290)">
+    <use href="#rs1" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#rs2" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#rs3" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#rs4" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 叶柄 -->
+    <path d="M 344 367 Q 350 364 356 362" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 348 290 Q 354 287 360 290" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 340 213 Q 348 210 355 213" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <use href="#rl1" fill="#1a1a1a"/>
+    <use href="#rl2" fill="#1a1a1a"/>
+    <use href="#rl3" fill="#1a1a1a"/>
+    <use href="#rl4" fill="#1a1a1a"/>
+    <use href="#rl5" fill="#1a1a1a"/>
+    <use href="#rl6" fill="#1a1a1a"/>
+    <use href="#rl7" fill="#1a1a1a"/>
+    <use href="#rl8" fill="#1a1a1a"/>
+    <use href="#rl9" fill="#1a1a1a"/>
+    <use href="#rlA" fill="#1a1a1a"/>
+    <use href="#rlB" fill="#1a1a1a"/>
+    <!-- 叶脉 -->
+    <line x1="356" y1="362" x2="406" y2="312" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="356" y1="362" x2="406" y2="356" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="356" y1="362" x2="400" y2="388" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="356" y1="362" x2="384" y2="398" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="360" y1="290" x2="410" y2="240" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="360" y1="290" x2="404" y2="282" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="360" y1="290" x2="398" y2="318" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="360" y1="290" x2="390" y2="320" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="355" y1="213" x2="398" y2="168" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="355" y1="213" x2="394" y2="206" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="355" y1="213" x2="392" y2="240" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+  </g>
+
+  <!-- ═══════════════ 第2层：中竹（中间层，左倾5°）═══════════════ -->
+  <g transform="rotate(-5, 256, 280)">
+    <use href="#ms1" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ms2" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ms3" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ms4" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#ms5" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 叶柄 -->
+    <line x1="244" y1="110" x2="232" y2="104" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="256" y1="110" x2="268" y2="104" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="250" y1="110" x2="244" y2="102" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="248" y1="144" x2="236" y2="138" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="260" y1="144" x2="272" y2="138" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="257" y1="220" x2="245" y2="215" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="269" y1="220" x2="281" y2="215" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="263" y1="220" x2="257" y2="212" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="260" y1="296" x2="248" y2="290" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="272" y1="296" x2="284" y2="290" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="266" y1="296" x2="260" y2="288" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+    <use href="#ml1" fill="#1a1a1a"/>
+    <use href="#ml2" fill="#1a1a1a"/>
+    <use href="#ml3" fill="#1a1a1a"/>
+    <use href="#ml4" fill="#1a1a1a"/>
+    <use href="#ml5" fill="#1a1a1a"/>
+    <use href="#ml6" fill="#1a1a1a"/>
+    <use href="#ml7" fill="#1a1a1a"/>
+    <use href="#ml8" fill="#1a1a1a"/>
+    <use href="#ml9" fill="#1a1a1a"/>
+    <use href="#mlA" fill="#1a1a1a"/>
+    <use href="#mlB" fill="#1a1a1a"/>
+    <!-- 叶脉 -->
+    <line x1="232" y1="104" x2="194" y2="64" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="268" y1="104" x2="306" y2="64" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="244" y1="102" x2="232" y2="62" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="236" y1="138" x2="200" y2="106" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="272" y1="138" x2="308" y2="106" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="245" y1="215" x2="212" y2="184" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="281" y1="215" x2="314" y2="184" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="257" y1="212" x2="248" y2="180" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="248" y1="290" x2="210" y2="256" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="284" y1="290" x2="322" y2="256" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    <line x1="260" y1="288" x2="252" y2="258" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+  </g>
+
+  <!-- ═══════════════ 第3层：左竹（最前面，右倾35°，斜穿而过）═══════ -->
+  <g mask="url(#mask-left)">
+    <g transform="rotate(35, 175, 500)">
+      <use href="#ls1" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#ls2" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#ls3" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#ls4" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#ls5" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- 叶柄 -->
+      <path d="M 168 368 Q 162 365 156 362" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M 162 290 Q 156 287 150 285" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M 165 213 Q 159 210 153 208" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <use href="#ll1" fill="#1a1a1a"/>
+      <use href="#ll2" fill="#1a1a1a"/>
+      <use href="#ll3" fill="#1a1a1a"/>
+      <use href="#ll4" fill="#1a1a1a"/>
+      <use href="#ll5" fill="#1a1a1a"/>
+      <use href="#ll6" fill="#1a1a1a"/>
+      <use href="#ll7" fill="#1a1a1a"/>
+      <use href="#ll8" fill="#1a1a1a"/>
+      <use href="#ll9" fill="#1a1a1a"/>
+      <use href="#llA" fill="#1a1a1a"/>
+      <use href="#llB" fill="#1a1a1a"/>
+      <!-- 叶脉 -->
+      <line x1="156" y1="362" x2="106" y2="312" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="156" y1="362" x2="106" y2="356" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="156" y1="362" x2="112" y2="388" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="156" y1="362" x2="128" y2="398" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="150" y1="285" x2="100" y2="234" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="150" y1="285" x2="104" y2="278" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="150" y1="285" x2="108" y2="312" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="150" y1="285" x2="122" y2="318" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="153" y1="208" x2="104" y2="162" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="153" y1="208" x2="110" y2="204" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+      <line x1="153" y1="208" x2="112" y2="234" stroke="#ccc" stroke-opacity="0.55" stroke-width="0.35" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

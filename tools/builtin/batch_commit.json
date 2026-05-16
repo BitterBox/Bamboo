@@ -1,0 +1,19 @@
+{
+  "name": "batch_commit",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "file",
+  "function": {
+    "description": "原子提交批量事务中的所有暂存写入。所有文件通过 rename 操作在同一时刻生效，Vite 仅触发一次重载，避免级联编译错误。使用 name 作为文件夹名（简短），description 记录详细描述。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "简短提交名称（必填），用于文件夹命名，如\"修复重名工具\"（建议 20 字以内）" },
+        "description": { "type": "string", "description": "详细描述（必填），说明本次修改的具体内容" }
+      },
+      "required": ["name", "description"]
+    }
+  },
+  "executor": "builtin:batch_commit",
+  "permissions": ["allowWrite"]
+}

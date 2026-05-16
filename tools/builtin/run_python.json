@@ -1,0 +1,20 @@
+{
+  "name": "run_python",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "python",
+  "function": {
+    "description": "在隔离的临时沙箱中执行 Python 代码并返回执行结果（stdout / stderr / 退出码）。支持自动检测 Conda 环境，通过 env_name 参数指定即可。适合进行数据分析、计算验证、文件处理等需要编程能力的场景。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "description": "要执行的 Python 3 源代码。推荐使用三引号包裹多行代码。可以 import 标准库和当前环境中已安装的第三方包。" },
+        "env_name": { "type": "string", "description": "Conda 环境名称（可选）。如 \"py310\"、\"data-science\"、\"base\"。留空或省略则使用系统 PATH 中的默认 Python。" },
+        "timeout": { "type": "number", "description": "超时时间（秒），默认 30，上限 120。超过此时间未执行完毕的进程将被强制终止。" }
+      },
+      "required": ["code"]
+    }
+  },
+  "executor": "builtin:run_python",
+  "permissions": ["pythonToolEnabled"]
+}

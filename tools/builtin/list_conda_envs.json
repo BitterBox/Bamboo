@@ -1,0 +1,16 @@
+{
+  "name": "list_conda_envs",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "python",
+  "function": {
+    "description": "列出所有可用的 Conda 环境名称。用于在调用 run_python 之前了解可用的 env_name 选项。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  "executor": "builtin:list_conda_envs",
+  "permissions": ["pythonToolEnabled"]
+}

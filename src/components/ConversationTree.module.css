@@ -1,0 +1,603 @@
+/* ============================================================
+   ConversationTree — 对话总览树（画布模式）
+   - 节点用连线连接，卡片式不占满宽度
+   - 鼠标拖拽平移 + 滚轮缩放
+   ============================================================ */
+
+/* ── 画布容器（占满父容器）────────────────────────────── */
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: default;
+  position: relative;
+  background:
+    radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.canvas:active {
+  cursor: default;
+}
+
+.canvasDragging {
+  cursor: grabbing !important;
+}
+
+/* ── 变换层（所有节点和连线在此层内）─────────────────── */
+
+.transformLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  width: 0;
+  height: 0;
+}
+
+/* ── SVG 连线层 ──────────────────────────────────────── */
+
+.edgeLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.edgeLine {
+  stroke: #cbd5e1;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.edgeLineChild {
+  stroke: #e2e8f0;
+  stroke-width: 1.5;
+}
+
+.edgeLineBranch {
+  stroke: #93c5fd;
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+}
+
+/* ── 节点卡片 ────────────────────────────────────────── */
+
+.treeNode {
+  position: absolute;
+  width: 220px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  user-select: none;
+  z-index: 2;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.treeNode:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+}
+
+/* 节点类型 — 背景色表示身份 */
+.node_user      { background: #eff6ff; }
+.node_assistant  { background: #ecfdf5; }
+.node_system     { background: #fffbeb; }
+.node_tool-call  { background: #f8fafc; }
+.node_tool-result{ background: #f8fafc; font-size: 0.7rem; }
+
+/* ── 助理节点阶段（仅左边框区分）────────────────────── */
+
+/* 思考中：琥珀左边框 */
+.node_assistant_thinking {
+  border-left: 3px solid #f59e0b;
+}
+.node_assistant_thinking .nodeLabel {
+  color: #92400e;
+}
+
+/* 调用工具中：靛蓝左边框 */
+.node_assistant_tool-calling {
+  border-left: 3px solid #6366f1;
+}
+.node_assistant_tool-calling .nodeLabel {
+  color: #3730a3;
+}
+
+/* 最终回答：无左边框，仅文字加粗 */
+.node_assistant_answering .nodeLabel {
+  color: #065f46;
+  font-weight: 500;
+}
+
+/* 视图路径 — 蓝色实线环（outline 与 box-shadow 互不冲突，可叠加） */
+.current {
+  outline: 2px solid rgba(59,130,246,0.5);
+  outline-offset: 1px;
+}
+
+/* 非活跃分支上的节点（淡化显示） */
+.inactiveBranch {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+
+/* 流式接收 — 绿色亮点沿节点矩形边缘绕行 */
+.streaming {
+  overflow: visible !important;
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
+}
+
+.streaming::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 12px 5px rgba(34,197,94,0.55);
+  top: -4px;
+  left: 0;
+  animation: orbitRect 2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes orbitRect {
+  0%   { top: -4px; left: 0; }
+  25%  { top: -4px; left: calc(100% - 8px); }
+  50%  { top: calc(100% - 4px); left: calc(100% - 8px); }
+  75%  { top: calc(100% - 4px); left: 0; }
+  100% { top: -4px; left: 0; }
+}
+
+/* ── 节点内部结构 ────────────────────────────────────── */
+
+.nodeIcon {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  line-height: 1;
+  width: 1.125rem;
+  text-align: center;
+}
+
+.nodeBody {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.nodeLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #374151;
+}
+
+.nodeSublabel {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* ── MCP 轮次分组背景 ────────────────────────────────── */
+
+.roundGroupBg {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.55), rgba(219, 234, 254, 0.35));
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 0;
+  /* 轻微内阴影增加层次感 */
+  box-shadow: inset 0 1px 3px rgba(59, 130, 246, 0.06);
+  /* 圆角顶部：第一个 round 背景延伸到顶部时更自然 */
+  transition: opacity 0.2s;
+}
+
+/* 最后一个 round 分组加粗底部边框，暗示轮次结束 */
+.roundGroupEnd {
+  border-bottom: 2px solid rgba(59, 130, 246, 0.15);
+}
+
+/* 相近的 round 之间加分隔线暗示 */
+.roundGroupBg + .roundGroupBg {
+  margin-top: -1px;
+}
+
+.roundGroupLabel {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  pointer-events: auto;
+  z-index: 1;
+  white-space: nowrap;
+  width: max-content;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  line-height: 1.6;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.roundGroupLabel:hover {
+  background: #eff6ff;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* 已折叠的轮次分组 */
+.roundGroupCollapsed {
+  background: rgba(248, 250, 252, 0.6) !important;
+  border-style: dashed !important;
+  opacity: 0.7;
+}
+
+/* ── 工具调用错误状态 ────────────────────────────────── */
+
+.toolCallError {
+  border-color: #f87171 !important;
+  background: #fef2f2 !important;
+  border-left-color: #ef4444 !important;
+}
+
+.toolCallError .nodeLabel {
+  color: #991b1b;
+}
+
+.toolResultError {
+  border-color: #fca5a5 !important;
+  background: #fef2f2 !important;
+  border-left-color: #ef4444 !important;
+}
+
+/* ── 折叠/展开按钮 ──────────────────────────────────── */
+
+.collapseToggle {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  line-height: 1;
+  color: #9ca3af;
+  transition: background 0.12s, color 0.12s;
+  margin-left: auto;
+}
+
+.collapseToggle:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ── 紧凑摘要条（折叠后的轮次摘要） ────────────────── */
+
+.compactNode {
+  border-color: #cbd5e1 !important;
+  background: #f8fafc !important;
+  cursor: pointer !important;
+  transition: background 0.12s, border-color 0.12s;
+  padding: 2px 8px !important;
+  gap: 4px !important;
+}
+
+.compactNode:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+}
+
+.compactNode .nodeIcon {
+  font-size: 0.7rem !important;
+}
+
+.compactLabel {
+  font-size: 0.65rem !important;
+  color: #475569 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactSublabel {
+  font-size: 0.6rem !important;
+  color: #94a3b8 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 紧凑摘要条 — 继承助理阶段左边框 */
+.node_assistant_thinking.compactNode {
+  border-left: 3px solid #f59e0b !important;
+}
+.node_assistant_tool-calling.compactNode {
+  border-left: 3px solid #6366f1 !important;
+}
+/* answering 紧凑节点无左边框 */
+
+/* ── 折叠摘要节点（工具数量汇总） ────────────────────── */
+
+.collapseSummary {
+  background: #f0f4ff !important;
+  border-color: #93c5fd !important;
+  border-left-color: #3b82f6 !important;
+  cursor: pointer !important;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.collapseSummary:hover {
+  background: #dbeafe !important;
+  border-color: #60a5fa !important;
+}
+
+.collapseSummary .nodeLabel {
+  color: #2563eb;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.collapseSummary .nodeSublabel {
+  color: #60a5fa;
+  font-size: 0.65rem;
+}
+
+/* 工具节点水平网格布局的微调 */
+.node_tool-call {
+  font-size: 0.7rem;
+}
+
+.node_tool-call .nodeLabel {
+  font-size: 0.7rem;
+}
+
+.node_tool-call .nodeSublabel {
+  font-size: 0.6rem;
+}
+
+/* ── 空状态 ────────────────────────────────────────── */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 24px;
+  text-align: center;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  border: 1px dashed #d1d5db;
+  min-width: 260px;
+}
+
+.emptyStateIcon {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+.emptyStateText {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.emptyStateHint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* ── 底部工具栏 ──────────────────────────────────────── */
+
+.toolbar {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 4px 8px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  z-index: 10;
+  user-select: none;
+}
+
+.toolbarBtn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  transition: background 0.12s, color 0.12s;
+}
+
+.toolbarBtn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.toolbarBtn:disabled {
+  color: #d1d5db;
+  cursor: default;
+  background: transparent;
+}
+
+.toolbarDivider {
+  width: 1px;
+  background: #e5e7eb;
+  margin: 4px 2px;
+}
+
+.toolbarZoom {
+  font-size: 0.6875rem;
+  color: #9ca3af;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  min-width: 2.75rem;
+  justify-content: center;
+}
+
+/* ── 工具栏统计摘要 ──────────────────────────────────── */
+
+.toolbarSummary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.6875rem;
+  color: #6b7280;
+  padding: 0 6px;
+  user-select: none;
+}
+
+.toolbarSummary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.toolbarSummary span:hover {
+  color: #374151;
+}
+
+/* ── 右键上下文菜单 ──────────────────────────────────── */
+
+.contextMenu {
+  position: absolute;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  user-select: none;
+}
+
+.contextMenuBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #374151;
+  white-space: nowrap;
+  transition: background 0.1s;
+  line-height: 1.4;
+}
+
+.contextMenuBtn:hover {
+  background: #f3f4f6;
+}
+
+.contextMenuBtnDanger {
+  color: #dc2626;
+}
+
+.contextMenuBtnDanger:hover {
+  background: #fef2f2;
+}
+
+.contextMenuBranch {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.06);
+  justify-content: center;
+}
+
+.contextMenuBranch:hover {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+/* ── 框选矩形 ──────────────────────────────────────── */
+
+.selectionBox {
+  position: absolute;
+  z-index: 50;
+  border: 1.5px dashed #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+/* ── 已选中节点 ────────────────────────────────────── */
+
+.selected {
+  border-color: #3b82f6 !important;
+  background: #eff6ff !important;
+  z-index: 3 !important;
+}
+
+.selected .nodeLabel {
+  color: #1d4ed8;
+}
+
+.selected:hover {
+  border-color: #2563eb !important;
+}
+
+/* 确保选中态的节点在 inactive 分支也清晰可见 */
+.selected.inactiveBranch {
+  opacity: 0.6 !important;
+  filter: grayscale(0.3) !important;
+}
+
+/* ── 多选右键菜单 ──────────────────────────────────── */
+
+.contextMenuMultiHint {
+  font-size: 0.625rem;
+  color: #9ca3af;
+  padding: 2px 10px 4px;
+  text-align: center;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 2px;
+  user-select: none;
+}

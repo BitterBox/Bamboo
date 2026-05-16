@@ -1,0 +1,16 @@
+{
+  "name": "clear_batch_cache",
+  "version": "1.0.0",
+  "type": "builtin",
+  "category": "file",
+  "function": {
+    "description": "清空暂存区：丢弃所有未提交的暂存修改，文件保持原始状态不变。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  "executor": "builtin:clear_batch_cache",
+  "permissions": ["allowWrite"]
+}

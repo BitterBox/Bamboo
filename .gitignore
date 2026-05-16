@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# MCP 代码修改备份
+.backups/
+
+# 运行时数据（API 密钥、聊天记录、用户配置）
+.data/
+sessions/
+
+# Electron 构建产物
+release/
+
+# Python 沙箱临时文件
+.python-sandbox/
+
+# 临时文件
+.temp/
+*.tmp
+*~
